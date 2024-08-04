@@ -1,0 +1,32 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+import pandas as pd
+
+web = "https://www.audible.in/search"
+path = "C:/Users/vikas/Downloads/chromedriver-win64/chromedriver-win64/chromedriver"
+driver = webdriver.Chrome(path)
+driver.get(web)
+
+container = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "adbl-impression-container ")))
+products = WebDriverWait(container, 5).until(EC.presence_of_all_elements_located((By.XPATH, "./div/span/ul/li")))
+
+book_title = []
+book_author = []
+book_length = []
+
+for product in products:
+    #time.sleep(5)
+    #book_title.append(product.find_element("xpath",'//h3[contains(@class, "bc-heading")]/a').text)
+    fli = product.find_element("xpath","//li[contains(@class, 'productListItem')]")
+    li = fli.get_attribute("aria-label")
+    book_title.append(li)
+    book_author.append(product.find_element("xpath",'//a[contains(@href, "author")]').text)
+    book_length.append(product.find_element("xpath",'//li[contains(@class, "runtimeLabel")]').text)
+
+df = pd.DataFrame({'title':book_title, 'author':book_author, 'length':book_length})
+df.to_csv('books.csv', index=False)
+
+driver.quit()
