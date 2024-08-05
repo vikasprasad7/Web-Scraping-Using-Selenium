@@ -1,0 +1,39 @@
+from selenium import webdriver
+import time
+from selenium.webdriver import Keys
+import pandas as pd
+
+web = "https://twitter.com"
+path = "C:/Users/vikas/Downloads/chromedriver-win64/chromedriver-win64/chromedriver"
+driver = webdriver.Chrome(path)
+driver.get(web)
+
+login = driver.find_element("xpath", "//a[contains(@href, '/login')]")
+driver.execute_script("arguments[0].click();", login)
+time.sleep(2)
+
+login_box = driver.find_element("xpath", "//div[contains(@role, 'group')]")
+username = login_box.find_element("xpath", ".//input[contains(@name, 'text')]")
+username.send_keys("7.vikasprasad@gmail.com")
+username.send_keys(Keys.ENTER)
+
+password = login_box.find_element("xpath", ".//input[contains(@name, 'session[password]')]")
+password.send_keys("Password")
+password.send_keys(Keys.ENTER)
+
+#importing tweets
+time.sleep(5)
+tweets = driver.find_elements("xpath", "//article[contains(@role, 'article')]")
+user_data = []
+text_data = []
+
+for tweet in tweets:
+    user = tweet.find_element("xpath", ".//span[contains(text(), '@')]").text()
+    text = tweet.find_element("xpath", ".//div[contains(@lang, '').text]")
+#    text = " ".join(text.split()) - optional to get formatted data
+    user_data.append[user]
+    text_data.append[text]
+
+df = pd.DataFrame({'user':user_data, 'text':text_data})
+df.to_csv('tweets.csv')
+
