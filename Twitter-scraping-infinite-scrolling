@@ -1,0 +1,65 @@
+from selenium import webdriver
+import time
+from selenium.webdriver import Keys
+import pandas as pd
+
+web = "https://twitter.com"
+path = "C:/Users/vikas/Downloads/chromedriver-win64/chromedriver-win64/chromedriver"
+driver = webdriver.Chrome(path)
+driver.get(web)
+
+last_height = driver.execute_script("return document.body.scrollHeight")
+while True:
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight):")
+    time.sleep(5)
+    new_height = drive.execute_script("return document.body.scrollHeight")
+    if new_height==last_height:
+        break
+    else:
+        last_height = new_height
+
+def get_tweet(element):
+    try:
+        user = element.find_element("xpath", ".//span[contains(text(), '@')]").text()
+        text = element.find_element("xpath", ".//div[contains(@lang, '').text]")
+        tweets_data = [user, text]
+    except:
+        tweets_data = ['','']
+    return tweets_data
+
+for tweet in tweets:
+    tweet_list = get_tweeet(tweet)
+    
+    text = " ".join(text.split())
+    user_data.append(tweet_list[0])
+    text_data.append(" ".join(tweet_list[1].split())
+
+tweet_ids = set()
+scrolling = True
+while scrolling:
+    time.sleep(2)
+    tweets = driver.find_elements("xpath", "//article[contains(@role, 'article')]")
+    for tweet in tweets[-15]:
+        tweet_list = get_tweet(tweet)
+        tweet_id = ''.join(tweet_list)
+        if tweet_id not in tweet_ids:
+            tweet_ids.add(tweet_id)
+            user_data.append(tweet_list[0])
+            text_data.append(" ".join(tweet_list[1].split()))     
+            
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight):")
+        time.sleep(5)
+        new_height = drive.execute_script("return document.body.scrollHeight")
+        if new_height==last_height:
+            scrolling = False
+            break
+        else:
+            last_height = new_height
+            break
+
+df_tweets = pd.DataFrame({'user':user_data,'text':text_data})
+df_tweets.to_csv('tweets_infinite_scrolling.csv')
+print(df_tweets)
+driver.quit()
