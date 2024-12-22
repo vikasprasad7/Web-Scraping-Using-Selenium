@@ -1,0 +1,67 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException
+import pandas as pd
+import requests
+import urllib.request
+import os
+import shutil
+import time
+
+web = "https://www.naukri.com/"
+path = "C:/Users/vikas/Downloads/chromedriver-win64/chromedriver-win64/chromedriver"
+driver = webdriver.Chrome(path)
+driver.get(web)
+
+urll = []
+
+a1 = driver.find_elements("xpath","//li/a")
+b1 = 0
+for aa in a1:
+    b1 = b1 + 1
+    urll.append(aa.get_attribute('href'))
+    if b1 == 22:
+        break
+print(urll)
+
+jobd = []
+req = []
+
+u1 = 0
+for u1 in range(22):
+    if u1 == 0:
+        pass
+    elif u1 == 1:
+        pass
+    elif u1 == 8:
+        pass
+    elif u1 == 15:
+        pass
+    else:
+        driver.get(urll[u1])
+        time.sleep(5)
+        a2 = driver.find_elements("xpath","//div[@class='srp-jobtuple-wrapper']/div/div/a")
+        b2 = 0
+        for ac in a2:
+            #print(b2,ac.text)
+            jobd.append(ac.text)
+            b2 = b2+1
+        print(jobd)
+        a3 = driver.find_elements("xpath","//div[@class=' row3']/div/span/span/span")
+        b3 = 0
+        for ad in a3:
+            #print(ad.text)
+            t1 = ad.text
+            t1 = t1.replace('\n','')
+            req.append(t1)
+            b3 = b3+1
+        print(req)
+
+  df = pd.DataFrame.from_dict({'description':jobd,'exp-sal-loca':req}, orient='index')
+  df.transpose()
+  df.to_csv('jobsiten.csv')
+
+  driver.quit()
