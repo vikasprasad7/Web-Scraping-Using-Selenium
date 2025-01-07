@@ -8,7 +8,7 @@ path = 'C:/Users/vikas/Downloads/chromedriver-win64/chromedriver-win64/chromedri
 driver = webdriver.Chrome(path)
 driver.get(website)
 
-all_matches_button = driver.find_element("xpath",'//label[@analytics-event=All matches]')
+all_matches_button = driver.find_element("xpath","//label[@analytics-event = 'All matches']")
 all_matches_button.click()
 
 matches = driver.find_elements("tag",'tr')
@@ -30,7 +30,7 @@ for match in matches:
 df = pd.DataFrame({'date':date,'home_team':home_team,'score':score,'away_team':away_team})
 df.to_csv('football_data.csv')
 
-all_matches_button = driver.find_element("xpath",'//label[@analytics-event=All matches]')
+all_matches_button = driver.find_element("xpath","//label[@analytics-event = 'All matches']")
 all_matches_button.click()
 
 dropdown = Select(driver.find_element("id",'country'))
