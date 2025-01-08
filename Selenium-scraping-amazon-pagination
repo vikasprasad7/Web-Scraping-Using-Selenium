@@ -13,9 +13,6 @@ pagination = driver.find_element("xpath", '//ul[contains(@class, "pagingElements
 pages = pagination.find_elements("xpath", './li')
 last_page = int(pages[-2].text)
 
-next_page = driver.find_element("xpath", "//span[contains(@class,  'nextButton')]")
-next_page.click()
-
 book_title = []
 book_author = []
 book_length = []
